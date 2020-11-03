@@ -135,14 +135,18 @@ public class Game implements GameInterface {
         while (i < 5) {
             int[] coords1 = getMove(1);
             mark(1, coords1[0], coords1[1]);
+            // clear
             printBoard();
+            // check win, check full, break if game over
 
             int[] coords2 = getMove(2);
             mark(2, coords2[0], coords2[1]);
+            // clear
             printBoard();
-
-            // check win, check full
+            // check win, check full, break if game over
             i++;
         }
+
+        // print result
     }
 }
