@@ -9,7 +9,7 @@ public class FiveInARow {
 
     public static void main(String[] args){
 
-        Game game = new Game(10, 10);
+        Game game = new Game(15, 15);
         int[][] board = game.getBoard();
 //        System.out.println(Arrays.deepToString(board));
         game.printBoard();

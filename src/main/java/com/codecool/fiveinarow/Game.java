@@ -3,6 +3,7 @@ package com.codecool.fiveinarow;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Game implements GameInterface {
 
@@ -63,6 +64,13 @@ public class Game implements GameInterface {
     }
 
     public int[] getMove(int player) {
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("Enter coordinates: ");
+        String inputCoords = userInput.nextLine();
+
+        int[] coords = translateCoords(inputCoords);
+        System.out.println(Arrays.toString(coords));
+
         return null;
     }
 
@@ -71,7 +79,7 @@ public class Game implements GameInterface {
     }
 
     public void mark(int player, int row, int col) {
-//        board[row][col] = player;
+        board[row][col] = player;
     }
 
     public boolean hasWon(int player, int howMany) {
@@ -85,7 +93,11 @@ public class Game implements GameInterface {
     public void printBoard() {
         System.out.print(" " + " ");
         for (int k = 0; k < board[0].length; k++) {
-            System.out.print(numbers[k] + " " + " ");
+            if (numbers[k].length()>1){
+                System.out.print(numbers[k] + " ");
+            } else {
+                System.out.print(numbers[k] + " " + " ");
+            }
         }
         System.out.println();
         for (int i = 0; i < board.length; i++) {
