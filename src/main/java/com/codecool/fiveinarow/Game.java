@@ -33,7 +33,7 @@ public class Game implements GameInterface {
         try {
             String row = input.substring(0, 1).toLowerCase();
             String col = input.substring(1);
-            return rows.containsKey(row) && cols.containsKey(col);
+            return (rows.containsKey(row) && cols.containsKey(col));
 
         } catch (Exception e) {
             System.out.println("Invalid input!");
@@ -75,7 +75,11 @@ public class Game implements GameInterface {
             } else {
                 coords = translateCoords(inputCoords);
                 if (coords != null){
-                    break;
+                    if (board[coords[0]][coords[1]] == 0){
+                        break;
+                    } else {
+                        System.out.println("Invalid input! This place is already taken!");
+                    }
                 } else {
                     System.out.println("Invalid input!");
                 }
