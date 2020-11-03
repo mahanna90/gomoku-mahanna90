@@ -18,6 +18,8 @@ public class FiveInARow {
                 numRows = rowsInput.nextInt();
                 if (numRows >= 10 && numRows <= 15) {
                     break;
+                } else {
+                    System.out.println("Invalid input!");
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input!");
@@ -34,6 +36,8 @@ public class FiveInARow {
                 numCols = rowsInput.nextInt();
                 if (numCols >= 10 && numRows <= 15) {
                     break;
+                } else {
+                    System.out.println("Invalid input!");
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input!");
@@ -49,6 +53,8 @@ public class FiveInARow {
 
         Game game = new Game(numRows, numCols);
         game.printBoard();
+
+        game.play(5);
 
 //        game.enableAi(1);
 //        game.enableAi(2);
