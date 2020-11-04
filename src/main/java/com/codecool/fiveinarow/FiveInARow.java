@@ -50,14 +50,20 @@ public class FiveInARow {
 
         numRows = getBoardHeight();
         numCols = getBoardWidth();
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("Please choose game mode:");
+        System.out.println("1: 2 player mode ");
+        System.out.println("2: AI-player mode ");
+        System.out.println("3: player-AI mode");
+        String input = userInput.nextLine();
 
         Game game = new Game(numRows, numCols);
-        game.printBoard();
-
-        game.play(5, "pvp");
-
-//        game.enableAi(1);
-//        game.enableAi(2);
-
+        if (input.equals("1")){
+                    game.play(5);
+        }else if(input.equals("2")){
+                    game.enableAi(1, 5);
+        }else if(input.equals("3")){
+            game.enableAi(2, 5);
+        }
     }
 }

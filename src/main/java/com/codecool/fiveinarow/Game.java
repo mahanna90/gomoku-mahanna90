@@ -95,8 +95,20 @@ public class Game implements GameInterface {
     }
 
     public int[] getAiMove(int player) {
-        return null;
+        while (true){
+            int col = (int) ((Math.random() * (board.length - 1)) + 1);
+            int row = (int) ((Math.random() * (board.length - 1)) + 1);
+            if (board[row][col] == 0) {
+                int[] coords = {row,col};
+                return coords;
+            }else if (board[row][col] != 0) {
+                continue;
+            } else if (isFull()) {
+                return null;
+            }
+        }
     }
+
 
     public void mark(int player, int row, int col) {
         board[row][col] = player;
@@ -219,12 +231,61 @@ public class Game implements GameInterface {
     }
 
 
-    public void enableAi(int player) {
+    public void enableAi(int player, int howMany) {
+        if (player == 1){
+            while (true){
+                int[] coords1 = getAiMove(1);
+                if (coords1 != null){
+                    mark(1, coords1[0], coords1[1]);
+                    printBoard();
+                    if (gameOver(1, howMany)){
+                        break;
+                    }
+                }else{
+                    System.out.println("It's a tie!");
+                }
+                int[] coords2 = getMove(2);
+                mark(2, coords2[0], coords2[1]);
+                // clear
+                printBoard();
+                if (gameOver(2, howMany)){
+                    break;
+                }
+            }
+
+        }
+
+        if (player == 2){
+            while (true){
+                int[] coords1 = getMove(1);
+                mark(1, coords1[0], coords1[1]);
+                // clear
+                printBoard();
+                if (gameOver(1, howMany)){
+                    break;
+                }
+
+                int[] coords2 = getAiMove(2);
+                if (coords2 != null){
+                    mark(2, coords1[0], coords1[1]);
+                    printBoard();
+                    if (gameOver(2, howMany)){
+                        break;
+                    }
+                }else{
+                    System.out.println("It's a tie!");
+                }
+
+            }
+        }
     }
 
-    public void play(int howMany, String gameMode) {
-        if (gameMode.equals("pvp")) {
-            pvpMode(howMany);
-        }System.out.println("Game over!");
+
+    public void play(int howMany) {
+
+        pvpMode(howMany);
+        System.out.println("Game over!");
     }
+
+
 }
