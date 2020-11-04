@@ -200,7 +200,7 @@ public class Game implements GameInterface {
         while (true) {
             int[] coords1 = getMove(1);
             mark(1, coords1[0], coords1[1]);
-            // clear
+            FiveInARow.clearScreen();
             printBoard();
 
             if (gameOver(1, howMany)){
@@ -209,7 +209,7 @@ public class Game implements GameInterface {
 
             int[] coords2 = getMove(2);
             mark(2, coords2[0], coords2[1]);
-            // clear
+            FiveInARow.clearScreen();
             printBoard();
             if (gameOver(2, howMany)){
                 break;

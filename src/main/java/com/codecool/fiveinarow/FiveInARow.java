@@ -10,6 +10,11 @@ public class FiveInARow {
     private static int numRows;
     private static int numCols;
 
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public static int getBoardHeight(){
         while (true) {
             Scanner rowsInput = new Scanner(System.in);
@@ -47,11 +52,12 @@ public class FiveInARow {
     }
 
     public static void main(String[] args){
-
+        clearScreen();
         numRows = getBoardHeight();
         numCols = getBoardWidth();
 
         Game game = new Game(numRows, numCols);
+        clearScreen();
         game.printBoard();
 
         game.play(5, "pvp");
