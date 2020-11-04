@@ -114,9 +114,7 @@ public class Game implements GameInterface {
                 } else if (board[i][j] != player) {
                     count = 0;
                 }
-
             }
-
         }
         return false;
     }
@@ -134,20 +132,49 @@ public class Game implements GameInterface {
                 } else if (board[j][i] != player) {
                     count = 0;
                 }
-
             }
-
         }
         return false;
     }
 
+    public boolean isWinningSet(int player, int howMany){
+        for (int i = 0; i < board[0].length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                int[] currentCoords = {i, j};
+                int[][] nearbyCoords = getNeighbors(currentCoords);
+            }
+        }
+        return false;
+    }
+
+    public int[][] getNeighbors(int[] coords){
+        int[][] nearbyCoords = new int[8][2];
+        for (int i = 0; i < 8; i++) {
+            nearbyCoords[0][0] = coords[0]-1;
+            nearbyCoords[0][1] = coords[1];
+            nearbyCoords[1][0] = coords[0]+1;
+            nearbyCoords[1][1] = coords[1];
+            nearbyCoords[2][0] = coords[0];
+            nearbyCoords[2][1] = coords[1]-1;
+            nearbyCoords[3][0] = coords[0];
+            nearbyCoords[3][1] = coords[1]+1;
+            nearbyCoords[4][0] = coords[0]-1;
+            nearbyCoords[4][1] = coords[1]-1;
+            nearbyCoords[5][0] = coords[0]+1;
+            nearbyCoords[5][1] = coords[1]+1;
+            nearbyCoords[6][0] = coords[0]+1;
+            nearbyCoords[6][1] = coords[1]-1;
+            nearbyCoords[7][0] = coords[0]-1;
+            nearbyCoords[7][1] = coords[1]+1;
+        }
+        return nearbyCoords;
+    }
+
     public boolean hasWon(int player, int howMany) {
         return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany);
-
     }
 
     public boolean isFull() {
-
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 0) {
