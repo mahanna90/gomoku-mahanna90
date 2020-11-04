@@ -149,24 +149,23 @@ public class Game implements GameInterface {
 
     public int[][] getNeighbors(int[] coords){
         int[][] nearbyCoords = new int[8][2];
-        for (int i = 0; i < 8; i++) {
-            nearbyCoords[0][0] = coords[0]-1;
-            nearbyCoords[0][1] = coords[1];
-            nearbyCoords[1][0] = coords[0]+1;
-            nearbyCoords[1][1] = coords[1];
-            nearbyCoords[2][0] = coords[0];
-            nearbyCoords[2][1] = coords[1]-1;
-            nearbyCoords[3][0] = coords[0];
-            nearbyCoords[3][1] = coords[1]+1;
-            nearbyCoords[4][0] = coords[0]-1;
-            nearbyCoords[4][1] = coords[1]-1;
-            nearbyCoords[5][0] = coords[0]+1;
-            nearbyCoords[5][1] = coords[1]+1;
-            nearbyCoords[6][0] = coords[0]+1;
-            nearbyCoords[6][1] = coords[1]-1;
-            nearbyCoords[7][0] = coords[0]-1;
-            nearbyCoords[7][1] = coords[1]+1;
-        }
+        nearbyCoords[0][0] = coords[0]-1;
+        nearbyCoords[0][1] = coords[1];
+        nearbyCoords[1][0] = coords[0]+1;
+        nearbyCoords[1][1] = coords[1];
+        nearbyCoords[2][0] = coords[0];
+        nearbyCoords[2][1] = coords[1]-1;
+        nearbyCoords[3][0] = coords[0];
+        nearbyCoords[3][1] = coords[1]+1;
+        nearbyCoords[4][0] = coords[0]-1;
+        nearbyCoords[4][1] = coords[1]-1;
+        nearbyCoords[5][0] = coords[0]+1;
+        nearbyCoords[5][1] = coords[1]+1;
+        nearbyCoords[6][0] = coords[0]+1;
+        nearbyCoords[6][1] = coords[1]-1;
+        nearbyCoords[7][0] = coords[0]-1;
+        nearbyCoords[7][1] = coords[1]+1;
+        System.out.println(Arrays.deepToString(nearbyCoords));
         return nearbyCoords;
     }
 
