@@ -138,13 +138,37 @@ public class Game implements GameInterface {
     }
 
     public boolean isWinningSet(int player, int howMany){
-        for (int i = 0; i < board[0].length; i++) {
-            for (int j = 0; j < board.length; j++) {
+        int count = 0;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
                 int[] currentCoords = {i, j};
-                int[][] nearbyCoords = getNeighbors(currentCoords);
+                if (board[i][j] == player) {
+                    count++;
+                    if (count >= howMany ) {
+                        return true;
+                    }
+                    int[][] nearbyCoords = getNeighbors(currentCoords);
+                    System.out.println(Arrays.deepToString(nearbyCoords));
+                    for (int k = 0; k < nearbyCoords.length; k++) {
+                        try {
+                            int coord1 = nearbyCoords[k][0];
+                            int coord2 = nearbyCoords[k][1];
+                            if (board[coord1][coord2] == player) {
+                                count++;
+                                nearbyCoords = getNeighbors(nearbyCoords[k]);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Coordinate not in board!");
+                        }
+                    }
+
+                } else {
+                    count = 0;
+                }
             }
         }
-        return false;
+        System.out.println("count is: " + count);
+        return count >= howMany;
     }
 
     public int[][] getNeighbors(int[] coords){
@@ -165,7 +189,7 @@ public class Game implements GameInterface {
         nearbyCoords[6][1] = coords[1]-1;
         nearbyCoords[7][0] = coords[0]-1;
         nearbyCoords[7][1] = coords[1]+1;
-        System.out.println(Arrays.deepToString(nearbyCoords));
+//        System.out.println(Arrays.deepToString(nearbyCoords));
         return nearbyCoords;
     }
 
@@ -192,7 +216,11 @@ public class Game implements GameInterface {
         } else if (isFull()) {
             System.out.println("It's a tie!");
             return true;
-        }return false;
+        } else if (isWinningSet(player, howMany)){
+            System.out.println("Found five!");
+            return true;
+        }
+        return false;
     }
 
     public void printBoard() {
