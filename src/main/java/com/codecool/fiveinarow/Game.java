@@ -17,14 +17,14 @@ public class Game implements GameInterface {
 
     public Game(int nRows, int nCols) {
         board = new int[nRows][nCols];
-        setCoords();
+        setCoords(nRows, nCols);
     }
 
-    public void setCoords() {
-        for (int i = 0; i < letters.length; i++) {
+    public void setCoords(int nRows, int nCols) {
+        for (int i = 0; i < nRows; i++) {
             rows.put(letters[i], i);
         }
-        for (int i = 0; i < numbers.length; i++) {
+        for (int i = 0; i < nCols; i++) {
             cols.put(numbers[i], i);
         }
     }
