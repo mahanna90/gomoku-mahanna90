@@ -66,9 +66,15 @@ public class Game implements GameInterface {
     public int[] getMove(int player) {
         String inputCoords;
         int[] coords;
+        String currentPlayer;
+        if(player == 1){
+            currentPlayer = "X";
+        }else {
+            currentPlayer = "O";
+        }
         while (true) {
             Scanner userInput = new Scanner(System.in);
-            System.out.println("Enter coordinates: ");
+            System.out.println(currentPlayer + "'s turn. " + "Enter coordinates: ");
             inputCoords = userInput.nextLine();
             if (inputCoords.length() < 2 || inputCoords.length() > 3){
                 System.out.println("Invalid input!");
@@ -97,12 +103,62 @@ public class Game implements GameInterface {
         board[row][col] = player;
     }
 
-    public boolean hasWon(int player, int howMany) {
+    public boolean isHorizontalWin(int player, int howMany){
+        int count = 0;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == player && count < howMany){
+                    count++;
+                    if (count >= howMany){
+                        return true;
+                    }
+                }else if(board[i][j] != player){
+                    count = 0;
+                }
+
+            }
+
+        }
         return false;
     }
 
-    public boolean isFull() {
+
+    public boolean isVerticalWin(int player, int howMany){
+        int count = 0;
+        for (int i = 0; i < board[0].length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[j][i] == player && count < howMany){
+                    count++;
+                    if (count >= howMany){
+                        return true;
+                    }
+                }else if(board[j][i] != player){
+                    count = 0;
+                }
+
+            }
+
+        }
         return false;
+    }
+
+    public boolean hasWon(int player, int howMany) {
+        return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany);
+
+    }
+
+    public boolean isFull() {
+
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j++){
+                if (board[i][j] == 0){
+                    return false;
+                }
+            }
+
+        } return true;
+
+
     }
 
     public void printBoard() {
@@ -125,28 +181,43 @@ public class Game implements GameInterface {
     }
 
     public void printResult(int player) {
+        if(player == 1){
+            System.out.println("X has won!");
+        }else{
+            System.out.println("O has won!");
+        }
     }
 
     public void enableAi(int player) {
     }
 
     public void play(int howMany) {
-        int i = 0;
-        while (i < 5) {
+        while (true) {
             int[] coords1 = getMove(1);
             mark(1, coords1[0], coords1[1]);
             // clear
             printBoard();
-            // check win, check full, break if game over
+
+            if (hasWon(1, howMany)){
+                printResult(1);
+                break;
+            }else if(isFull()){
+                System.out.println("It's a tie!");
+                break;
+            }
 
             int[] coords2 = getMove(2);
             mark(2, coords2[0], coords2[1]);
             // clear
             printBoard();
-            // check win, check full, break if game over
-            i++;
-        }
+            if (hasWon(2, howMany)){
+                printResult(2);
+                break;
+            }else if(isFull()){
+                System.out.println("It's a tie!");
+                break;
+            }
+        }System.out.println("Game over!");
 
-        // print result
     }
 }
