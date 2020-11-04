@@ -181,8 +181,53 @@ public class Game implements GameInterface {
         return false;
     }
 
+    public boolean rightDiagonalWin(int player, int howMany){
+        int length = board.length;
+        int diagonalLines = (length + length) - 1;
+        int itemsInDiagonal = 0;
+        int midPoint = (diagonalLines / 2) + 1;
+
+        for (int i = 1; i <= diagonalLines; i++) {
+            int rowIndex;
+            int columnIndex;
+            int count = 0;
+            if (i <= midPoint) {
+                itemsInDiagonal++;
+                for (int j = 0; j < itemsInDiagonal; j++) {
+                    rowIndex = (length - i) + j;
+                    columnIndex = j;
+
+                    if (board[rowIndex][columnIndex] == player){
+                        count++;
+                        if (count >= howMany) {
+                            return true;
+                        }
+                    } else {
+                        count = 0;
+                    }
+                }
+            } else {
+                itemsInDiagonal--;
+                for (int j = 0; j < itemsInDiagonal; j++) {
+                    rowIndex = j;
+                    columnIndex = (i - length) + j;
+
+                    if (board[rowIndex][columnIndex] == player){
+                        count++;
+                        if (count >= howMany) {
+                            return true;
+                        }
+                    } else {
+                        count = 0;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean hasWon(int player, int howMany) {
-        return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany) || leftDiagonalWin(player, howMany);
+        return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany) || leftDiagonalWin(player, howMany) || rightDiagonalWin(player, howMany);
     }
 
     public boolean isFull() {
