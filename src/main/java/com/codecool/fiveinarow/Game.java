@@ -119,7 +119,6 @@ public class Game implements GameInterface {
         return false;
     }
 
-
     public boolean isVerticalWin(int player, int howMany) {
         int count = 0;
         for (int i = 0; i < board[0].length; i++) {
@@ -137,64 +136,53 @@ public class Game implements GameInterface {
         return false;
     }
 
-    public boolean isWinningSet(int player, int howMany){
-        int count = 0;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                int[] currentCoords = {i, j};
-                if (board[i][j] == player) {
-                    count++;
-                    if (count >= howMany ) {
-                        return true;
-                    }
-                    int[][] nearbyCoords = getNeighbors(currentCoords);
-                    System.out.println(Arrays.deepToString(nearbyCoords));
-                    for (int k = 0; k < nearbyCoords.length; k++) {
-                        try {
-                            int coord1 = nearbyCoords[k][0];
-                            int coord2 = nearbyCoords[k][1];
-                            if (board[coord1][coord2] == player) {
-                                count++;
-                                nearbyCoords = getNeighbors(nearbyCoords[k]);
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Coordinate not in board!");
-                        }
-                    }
+    public boolean leftDiagonalWin(int player, int howMany){
+        int length = board.length;
+        int diagonalLines = (length + length) - 1;
+        int itemsInDiagonal = 0;
+        int midPoint = (diagonalLines / 2) + 1;
 
-                } else {
-                    count = 0;
+        for (int i = 1; i <= diagonalLines; i++) {
+            int rowIndex;
+            int columnIndex;
+            int count = 0;
+            if (i <= midPoint) {
+                itemsInDiagonal++;
+                for (int j = 0; j < itemsInDiagonal; j++) {
+                    rowIndex = (i - j) - 1;
+                    columnIndex = j;
+
+                    if (board[rowIndex][columnIndex] == player){
+                        count++;
+                        if (count >= howMany) {
+                            return true;
+                        }
+                    } else {
+                        count = 0;
+                    }
+                }
+            } else {
+                itemsInDiagonal--;
+                for (int j = 0; j < itemsInDiagonal; j++) {
+                    rowIndex = (length - 1) - j;
+                    columnIndex = (i - length) + j;
+
+                    if (board[rowIndex][columnIndex] == player){
+                        count++;
+                        if (count >= howMany) {
+                            return true;
+                        }
+                    } else {
+                        count = 0;
+                    }
                 }
             }
         }
-        System.out.println("count is: " + count);
-        return count >= howMany;
-    }
-
-    public int[][] getNeighbors(int[] coords){
-        int[][] nearbyCoords = new int[8][2];
-        nearbyCoords[0][0] = coords[0]-1;
-        nearbyCoords[0][1] = coords[1];
-        nearbyCoords[1][0] = coords[0]+1;
-        nearbyCoords[1][1] = coords[1];
-        nearbyCoords[2][0] = coords[0];
-        nearbyCoords[2][1] = coords[1]-1;
-        nearbyCoords[3][0] = coords[0];
-        nearbyCoords[3][1] = coords[1]+1;
-        nearbyCoords[4][0] = coords[0]-1;
-        nearbyCoords[4][1] = coords[1]-1;
-        nearbyCoords[5][0] = coords[0]+1;
-        nearbyCoords[5][1] = coords[1]+1;
-        nearbyCoords[6][0] = coords[0]+1;
-        nearbyCoords[6][1] = coords[1]-1;
-        nearbyCoords[7][0] = coords[0]-1;
-        nearbyCoords[7][1] = coords[1]+1;
-//        System.out.println(Arrays.deepToString(nearbyCoords));
-        return nearbyCoords;
+        return false;
     }
 
     public boolean hasWon(int player, int howMany) {
-        return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany);
+        return isHorizontalWin(player, howMany) || isVerticalWin(player, howMany) || leftDiagonalWin(player, howMany);
     }
 
     public boolean isFull() {
@@ -204,7 +192,6 @@ public class Game implements GameInterface {
                     return false;
                 }
             }
-
         }
         return true;
     }
@@ -215,9 +202,6 @@ public class Game implements GameInterface {
             return true;
         } else if (isFull()) {
             System.out.println("It's a tie!");
-            return true;
-        } else if (isWinningSet(player, howMany)){
-            System.out.println("Found five!");
             return true;
         }
         return false;
