@@ -139,7 +139,8 @@ public class Game implements GameInterface {
             int[] rightNeighbor = {lastCoord[0], (lastCoord[1]+1)};
             savePossibleMoves(leftNeighbor);
             savePossibleMoves(rightNeighbor);
-        } else if (isVerticalWin(player, howMany)){
+        }
+        if (isVerticalWin(player, howMany)){
             playedCoords = winningCoords;
             int[] firstCoord = playedCoords[0];
             int[] lastCoord = playedCoords[howMany-1];
@@ -147,7 +148,8 @@ public class Game implements GameInterface {
             int[] bottomNeighbor = {lastCoord[0]+1, (lastCoord[1])};
             savePossibleMoves(topNeighbor);
             savePossibleMoves(bottomNeighbor);
-        } else if (leftDiagonalWin(player, howMany)){
+        }
+        if (leftDiagonalWin(player, howMany)){
             playedCoords = winningCoords;
             int[] firstCoord = playedCoords[0];
             int[] lastCoord = playedCoords[howMany-1];
@@ -155,7 +157,8 @@ public class Game implements GameInterface {
             int[] bottomLeftNeighbor = {lastCoord[0]+1, (lastCoord[1]-1)};
             savePossibleMoves(topRightNeighbor);
             savePossibleMoves(bottomLeftNeighbor);
-        } else if (rightDiagonalWin(player, howMany)) {
+        }
+        if (rightDiagonalWin(player, howMany)) {
             playedCoords = winningCoords;
             int[] firstCoord = playedCoords[0];
             int[] lastCoord = playedCoords[howMany-1];
@@ -164,6 +167,7 @@ public class Game implements GameInterface {
             savePossibleMoves(topLeftNeighbor);
             savePossibleMoves(bottomRightNeighbor);
         }
+        System.out.println(Arrays.deepToString(possibleMoves));
         if (possibleMoves.length > 0) {
             int[] coords = getRandomCoord(possibleMoves);
             return coords;
@@ -185,7 +189,7 @@ public class Game implements GameInterface {
     }
 
     public int[] getRandomCoord(int[][] validCoords){
-        int index = (int) ((Math.random() * (validCoords.length - 1)) + 1);
+        int index = (int) (Math.random() * validCoords.length);
         return validCoords[index];
     }
 
@@ -219,6 +223,7 @@ public class Game implements GameInterface {
                 } else if (board[i][j] != player) {
                     count = 0;
                     winningCoords = new int[howMany][2];
+                    index = 0;
                 }
             }
         }
@@ -233,8 +238,8 @@ public class Game implements GameInterface {
             for (int j = 0; j < board.length; j++) {
                 if (board[j][i] == player && count < howMany) {
                     count++;
-                    winningCoords[index][0] = i;
-                    winningCoords[index][1] = j;
+                    winningCoords[index][0] = j;
+                    winningCoords[index][1] = i;
                     index++;
                     if (count >= howMany) {
                         return true;
@@ -242,6 +247,7 @@ public class Game implements GameInterface {
                 } else if (board[j][i] != player) {
                     count = 0;
                     winningCoords = new int[howMany][2];
+                    index = 0;
                 }
             }
         }
@@ -268,8 +274,8 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
-                        winningCoords[index][0] = i;
-                        winningCoords[index][1] = j;
+                        winningCoords[index][0] = rowIndex;
+                        winningCoords[index][1] = columnIndex;
                         index++;
                         if (count >= howMany) {
                             return true;
@@ -277,6 +283,7 @@ public class Game implements GameInterface {
                     } else {
                         count = 0;
                         winningCoords = new int[howMany][2];
+                        index = 0;
                     }
                 }
             } else {
@@ -287,8 +294,8 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
-                        winningCoords[index][0] = i;
-                        winningCoords[index][1] = j;
+                        winningCoords[index][0] = rowIndex;
+                        winningCoords[index][1] = columnIndex;
                         index++;
                         if (count >= howMany) {
                             return true;
@@ -296,6 +303,7 @@ public class Game implements GameInterface {
                     } else {
                         count = 0;
                         winningCoords = new int[howMany][2];
+                        index = 0;
                     }
                 }
             }
@@ -323,8 +331,8 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
-                        winningCoords[index][0] = i;
-                        winningCoords[index][1] = j;
+                        winningCoords[index][0] = rowIndex;
+                        winningCoords[index][1] = columnIndex;
                         index++;
                         if (count >= howMany) {
                             return true;
@@ -332,6 +340,7 @@ public class Game implements GameInterface {
                     } else {
                         count = 0;
                         winningCoords = new int[howMany][2];
+                        index = 0;
                     }
                 }
             } else {
@@ -342,8 +351,8 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
-                        winningCoords[index][0] = i;
-                        winningCoords[index][1] = j;
+                        winningCoords[index][0] = rowIndex;
+                        winningCoords[index][1] = columnIndex;
                         index++;
                         if (count >= howMany) {
                             return true;
@@ -351,6 +360,7 @@ public class Game implements GameInterface {
                     } else {
                         count = 0;
                         winningCoords = new int[howMany][2];
+                        index = 0;
                     }
                 }
             }
