@@ -76,10 +76,12 @@ public class Game implements GameInterface {
             Scanner userInput = new Scanner(System.in);
             System.out.println(currentPlayer + "'s turn. " + "Enter coordinates: ");
             inputCoords = userInput.nextLine();
-            if (inputCoords.length() < 2 || inputCoords.length() > 3) {
+            if(inputCoords.toLowerCase().equals("quit") || inputCoords.toLowerCase().equals("q")){
+            System.out.println("Good Bye!");
+            System.exit(0);
+            }else if (inputCoords.length() < 2 || inputCoords.length() > 3) {
                 System.out.println("Invalid input!");
-            }
-            else {
+            }else {
                 coords = translateCoords(inputCoords);
                 if (coords != null) {
                     if (board[coords[0]][coords[1]] == 0) {

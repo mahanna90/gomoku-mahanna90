@@ -62,12 +62,16 @@ public class FiveInARow {
             System.out.println("1: 2 player mode ");
             System.out.println("2: AI-player mode ");
             System.out.println("3: player-AI mode");
+            System.out.println("q: Quit game");
             try{
                 input = userInput.nextLine();
                 if (input.equals("1") || input.equals("2") || input.equals("3")){
                     break;
-
-                }else{
+                }else if(input.toLowerCase().equals("q")){
+                    System.out.println("Good Bye!");
+                    System.exit(0);
+                }
+                else{
                     System.out.println("Invalid input!");
                 }
             }
