@@ -1,9 +1,6 @@
 package com.codecool.fiveinarow;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game implements GameInterface {
 
@@ -14,6 +11,9 @@ public class Game implements GameInterface {
 
     public Map<String, Integer> rows = new HashMap<>();
     public Map<String, Integer> cols = new HashMap<>();
+
+    int[][] winningCoords;
+    int[][] possibleMoves;
 
     public Game(int nRows, int nCols) {
         board = new int[nRows][nCols];
@@ -53,7 +53,6 @@ public class Game implements GameInterface {
             return null;
         }
     }
-
 
     public int[][] getBoard() {
         return board;
@@ -98,6 +97,24 @@ public class Game implements GameInterface {
     }
 
     public int[] getAiMove(int player) {
+        int[] coords;
+//        if () {
+// check if player can win, if so prevent it (maybe check for 3 too)
+        if (getStrategicMove(player, 4) != null) {
+            coords = getStrategicMove(player, 4);
+        } else if (getStrategicMove(player, 3) != null){
+            coords = getStrategicMove(player, 3);
+        } else if (getStrategicMove(player, 2) != null) {
+            coords = getStrategicMove(player, 2);
+        } else if (getStrategicMove(player, 1) != null) {
+            coords = getStrategicMove(player, 1);
+        } else {
+            coords = getRandomMove();
+        }
+        return coords;
+    }
+
+    public int[] getRandomMove(){
         while (true) {
             int col = (int) ((Math.random() * (board.length - 1)) + 1);
             int row = (int) ((Math.random() * (board.length - 1)) + 1);
@@ -110,6 +127,76 @@ public class Game implements GameInterface {
         }
     }
 
+    public int[] getStrategicMove(int player, int howMany){
+        int[][] playedCoords;
+        possibleMoves = new int[0][0];
+
+        if (isHorizontalWin(player, howMany)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[howMany-1];
+            int[] leftNeighbor = {firstCoord[0], (firstCoord[1]-1)};
+            int[] rightNeighbor = {lastCoord[0], (lastCoord[1]+1)};
+            savePossibleMoves(leftNeighbor);
+            savePossibleMoves(rightNeighbor);
+        } else if (isVerticalWin(player, howMany)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[howMany-1];
+            int[] topNeighbor = {firstCoord[0]-1, (firstCoord[1])};
+            int[] bottomNeighbor = {lastCoord[0]+1, (lastCoord[1])};
+            savePossibleMoves(topNeighbor);
+            savePossibleMoves(bottomNeighbor);
+        } else if (leftDiagonalWin(player, howMany)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[howMany-1];
+            int[] topRightNeighbor = {firstCoord[0]-1, (firstCoord[1]+1)};
+            int[] bottomLeftNeighbor = {lastCoord[0]+1, (lastCoord[1]-1)};
+            savePossibleMoves(topRightNeighbor);
+            savePossibleMoves(bottomLeftNeighbor);
+        } else if (rightDiagonalWin(player, howMany)) {
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[howMany-1];
+            int[] topLeftNeighbor = {firstCoord[0]-1, (firstCoord[1]-1)};
+            int[] bottomRightNeighbor = {lastCoord[0]+1, (lastCoord[1]+1)};
+            savePossibleMoves(topLeftNeighbor);
+            savePossibleMoves(bottomRightNeighbor);
+        }
+        if (possibleMoves.length > 0) {
+            int[] coords = getRandomCoord(possibleMoves);
+            return coords;
+        } else {
+            return null;
+        }
+    }
+
+    public void savePossibleMoves(int[] move){
+        if (isInBoard(move) && (isNotTaken(move))) {
+            int[][] newArray = new int[possibleMoves.length+1][2];
+            for (int i = 0; i < possibleMoves.length; i++) {
+                newArray[i] = possibleMoves[i];
+            }
+            newArray[possibleMoves.length][0] = move[0];
+            newArray[possibleMoves.length][1] = move[1];
+            possibleMoves = newArray;
+        }
+    }
+
+    public int[] getRandomCoord(int[][] validCoords){
+        int index = (int) ((Math.random() * (validCoords.length - 1)) + 1);
+        return validCoords[index];
+    }
+
+    public boolean isInBoard(int[] coords) {
+        return (coords[0] >= 0 && coords[0] < board.length) && (coords[1] >= 0 && coords[1] < board[0].length);
+    }
+
+    public boolean isNotTaken(int[] coords){
+        return board[coords[0]][coords[1]] == 0;
+    }
+
 
     public void mark(int player, int row, int col) {
         board[row][col] = player;
@@ -117,15 +204,21 @@ public class Game implements GameInterface {
 
     public boolean isHorizontalWin(int player, int howMany) {
         int count = 0;
+        winningCoords = new int[howMany][2];
+        int index = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == player && count < howMany) {
                     count++;
+                    winningCoords[index][0] = i;
+                    winningCoords[index][1] = j;
+                    index++;
                     if (count >= howMany) {
                         return true;
                     }
                 } else if (board[i][j] != player) {
                     count = 0;
+                    winningCoords = new int[howMany][2];
                 }
             }
         }
@@ -134,15 +227,21 @@ public class Game implements GameInterface {
 
     public boolean isVerticalWin(int player, int howMany) {
         int count = 0;
+        winningCoords = new int[howMany][2];
+        int index = 0;
         for (int i = 0; i < board[0].length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[j][i] == player && count < howMany) {
                     count++;
+                    winningCoords[index][0] = i;
+                    winningCoords[index][1] = j;
+                    index++;
                     if (count >= howMany) {
                         return true;
                     }
                 } else if (board[j][i] != player) {
                     count = 0;
+                    winningCoords = new int[howMany][2];
                 }
             }
         }
@@ -150,6 +249,8 @@ public class Game implements GameInterface {
     }
 
     public boolean leftDiagonalWin(int player, int howMany){
+        winningCoords = new int[howMany][2];
+        int index = 0;
         int length = board.length;
         int diagonalLines = (length + length) - 1;
         int itemsInDiagonal = 0;
@@ -167,11 +268,15 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
+                        winningCoords[index][0] = i;
+                        winningCoords[index][1] = j;
+                        index++;
                         if (count >= howMany) {
                             return true;
                         }
                     } else {
                         count = 0;
+                        winningCoords = new int[howMany][2];
                     }
                 }
             } else {
@@ -182,11 +287,15 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
+                        winningCoords[index][0] = i;
+                        winningCoords[index][1] = j;
+                        index++;
                         if (count >= howMany) {
                             return true;
                         }
                     } else {
                         count = 0;
+                        winningCoords = new int[howMany][2];
                     }
                 }
             }
@@ -195,6 +304,8 @@ public class Game implements GameInterface {
     }
 
     public boolean rightDiagonalWin(int player, int howMany){
+        winningCoords = new int[howMany][2];
+        int index = 0;
         int length = board.length;
         int diagonalLines = (length + length) - 1;
         int itemsInDiagonal = 0;
@@ -212,11 +323,15 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
+                        winningCoords[index][0] = i;
+                        winningCoords[index][1] = j;
+                        index++;
                         if (count >= howMany) {
                             return true;
                         }
                     } else {
                         count = 0;
+                        winningCoords = new int[howMany][2];
                     }
                 }
             } else {
@@ -227,11 +342,15 @@ public class Game implements GameInterface {
 
                     if (board[rowIndex][columnIndex] == player){
                         count++;
+                        winningCoords[index][0] = i;
+                        winningCoords[index][1] = j;
+                        index++;
                         if (count >= howMany) {
                             return true;
                         }
                     } else {
                         count = 0;
+                        winningCoords = new int[howMany][2];
                     }
                 }
             }
