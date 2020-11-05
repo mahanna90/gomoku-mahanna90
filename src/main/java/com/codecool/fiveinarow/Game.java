@@ -76,12 +76,12 @@ public class Game implements GameInterface {
             Scanner userInput = new Scanner(System.in);
             System.out.println(currentPlayer + "'s turn. " + "Enter coordinates: ");
             inputCoords = userInput.nextLine();
-            if(inputCoords.toLowerCase().equals("quit") || inputCoords.toLowerCase().equals("q")){
-            System.out.println("Good Bye!");
-            System.exit(0);
-            }else if (inputCoords.length() < 2 || inputCoords.length() > 3) {
+            if (inputCoords.toLowerCase().equals("quit") || inputCoords.toLowerCase().equals("q")) {
+                System.out.println("Good Bye!");
+                System.exit(0);
+            } else if (inputCoords.length() < 2 || inputCoords.length() > 3) {
                 System.out.println("Invalid input!");
-            }else {
+            } else {
                 coords = translateCoords(inputCoords);
                 if (coords != null) {
                     if (board[coords[0]][coords[1]] == 0) {
@@ -98,11 +98,11 @@ public class Game implements GameInterface {
     }
 
     public int[] getAiMove(int player) {
-        while (true){
+        while (true) {
             int col = (int) ((Math.random() * (board.length - 1)) + 1);
             int row = (int) ((Math.random() * (board.length - 1)) + 1);
             if (board[row][col] == 0) {
-                int[] coords = {row,col};
+                int[] coords = {row, col};
                 return coords;
             } else if (isFull()) {
                 return null;
@@ -172,14 +172,15 @@ public class Game implements GameInterface {
         return true;
     }
 
-    public boolean gameOver(int player, int howMany){
+    public boolean gameOver(int player, int howMany) {
         if (hasWon(player, howMany)) {
             printResult(player);
             return true;
         } else if (isFull()) {
             System.out.println("It's a tie!");
             return true;
-        }return false;
+        }
+        return false;
     }
 
     public void printBoard() {
@@ -209,32 +210,29 @@ public class Game implements GameInterface {
         }
     }
 
-    public void sleep(int sec){
-        try
-        {
+    public void sleep(int sec) {
+        try {
             Thread.sleep(sec * 1000);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             System.out.println("Something went wrong");
         }
 
     }
 
 
-    public void enableAi(int player, int howMany){
-        if (player == 1){
-            while (true){
+    public void enableAi(int player, int howMany) {
+        if (player == 1) {
+            while (true) {
                 int[] coords1 = getAiMove(1);
-                if (coords1 != null){
+                if (coords1 != null) {
                     mark(1, coords1[0], coords1[1]);
                     FiveInARow.clearScreen();
                     printBoard();
                     sleep(2);
-                    if (gameOver(1, howMany)){
+                    if (gameOver(1, howMany)) {
                         break;
                     }
-                }else{
+                } else {
                     System.out.println("It's a tie!");
                 }
                 int[] coords2 = getMove(2);
@@ -242,39 +240,37 @@ public class Game implements GameInterface {
                 FiveInARow.clearScreen();
                 printBoard();
                 sleep(2);
-                if (gameOver(2, howMany)){
+                if (gameOver(2, howMany)) {
                     break;
                 }
             }
 
-        }
+        } else if (player == 2) {
+            while (true) {
+                int[] coords1 = getMove(1);
+                mark(1, coords1[0], coords1[1]);
+                FiveInARow.clearScreen();
+                printBoard();
+                sleep(2);
+                if (gameOver(1, howMany)) {
+                    break;
+                }
 
-           else if (player == 2){
-                while (true){
-                    int[] coords1 = getMove(1);
-                    mark(1, coords1[0], coords1[1]);
+                int[] coords2 = getAiMove(2);
+                if (coords2 != null) {
+                    mark(2, coords2[0], coords2[1]);
                     FiveInARow.clearScreen();
                     printBoard();
                     sleep(2);
-                    if (gameOver(1, howMany)){
+                    if (gameOver(2, howMany)) {
                         break;
                     }
-
-                    int[] coords2 = getAiMove(2);
-                    if (coords2 != null){
-                        mark(2, coords2[0], coords2[1]);
-                        FiveInARow.clearScreen();
-                        printBoard();
-                        sleep(2);
-                        if (gameOver(2, howMany)){
-                            break;
-                        }
-                    }else{
-                        System.out.println("It's a tie!");
-                    }
-
+                } else {
+                    System.out.println("It's a tie!");
                 }
+
             }
+        }
     }
 
 
@@ -286,7 +282,7 @@ public class Game implements GameInterface {
 
             printBoard();
 
-            if (gameOver(1, howMany)){
+            if (gameOver(1, howMany)) {
                 break;
             }
 
@@ -295,9 +291,10 @@ public class Game implements GameInterface {
             FiveInARow.clearScreen();
 
             printBoard();
-            if (gameOver(2, howMany)){
+            if (gameOver(2, howMany)) {
                 break;
             }
         }
         System.out.println("Game over!");
     }
+}
