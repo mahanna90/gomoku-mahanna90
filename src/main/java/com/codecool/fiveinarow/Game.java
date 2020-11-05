@@ -301,6 +301,3 @@ public class Game implements GameInterface {
         }
         System.out.println("Game over!");
     }
-
-
-}
