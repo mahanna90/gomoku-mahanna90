@@ -180,7 +180,6 @@ public class Game implements GameInterface {
             savePossibleMoves(topLeftNeighbor);
             savePossibleMoves(bottomRightNeighbor);
         }
-        System.out.println(Arrays.deepToString(possibleMoves));
         if (possibleMoves.length > 0) {
             int[] coords = getRandomCoord(possibleMoves);
             return coords;
@@ -220,10 +219,10 @@ public class Game implements GameInterface {
     }
 
     public boolean isHorizontalWin(int player, int howMany) {
-        int count = 0;
         winningCoords = new int[howMany][2];
         int index = 0;
         for (int i = 0; i < board.length; i++) {
+            int count = 0;
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == player && count < howMany) {
                     count++;
@@ -244,10 +243,10 @@ public class Game implements GameInterface {
     }
 
     public boolean isVerticalWin(int player, int howMany) {
-        int count = 0;
         winningCoords = new int[howMany][2];
         int index = 0;
         for (int i = 0; i < board[0].length; i++) {
+            int count = 0;
             for (int j = 0; j < board.length; j++) {
                 if (board[j][i] == player && count < howMany) {
                     count++;
@@ -442,6 +441,28 @@ public class Game implements GameInterface {
         }
     }
 
+    public void playAgain(){
+        while (true) {
+            Scanner again = new Scanner(System.in);
+            System.out.println("Do you want to play again? (y/n)");
+            try {
+                String answer = again.nextLine();
+                if (answer.equals("y")) {
+                    break;
+                } else if ( answer.equals("n")) {
+                    System.exit(0);
+                } else {
+                    System.out.println("Invalid input!");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input!");
+            }
+
+        }
+        String[] args = {"y"};
+        FiveInARow.main(args);
+    }
+
 
     public void enableAi(int player, int howMany) {
         if (player == 1) {
@@ -467,6 +488,8 @@ public class Game implements GameInterface {
                     break;
                 }
             }
+            System.out.println();
+            playAgain();
 
         } else if (player == 2) {
             while (true) {
@@ -493,6 +516,8 @@ public class Game implements GameInterface {
                 }
 
             }
+            System.out.println();
+            playAgain();
         }
     }
 
@@ -515,6 +540,8 @@ public class Game implements GameInterface {
                 break;
             }
         }
-        System.out.println("Game over!");
+        System.out.println();
+        playAgain();
+
     }
 }
