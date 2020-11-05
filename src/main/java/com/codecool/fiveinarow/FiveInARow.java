@@ -9,10 +9,13 @@ public class FiveInARow {
 
     private static int numRows;
     private static int numCols;
+    private static String gameMode;
 
     public static void clearScreen() {
+
         System.out.print("\033[H\033[2J");
         System.out.flush();
+
     }
 
     public static int getBoardHeight(){
@@ -51,7 +54,37 @@ public class FiveInARow {
         return numRows;
     }
 
+    public static String selectGameMode(){
+        String input;
+        while (true){
+            Scanner userInput = new Scanner(System.in);
+            System.out.println("Please choose game mode:");
+            System.out.println("1: 2 player mode ");
+            System.out.println("2: AI-player mode ");
+            System.out.println("3: player-AI mode");
+            System.out.println("q: Quit game");
+            try{
+                input = userInput.nextLine();
+                if (input.equals("1") || input.equals("2") || input.equals("3")){
+                    break;
+                }else if(input.toLowerCase().equals("q")){
+                    System.out.println("Good Bye!");
+                    System.exit(0);
+                }
+                else{
+                    System.out.println("Invalid input!");
+                }
+            }
+            catch (Exception e){
+                System.out.println("Invalid input!");
+            }
+        }
+        return input;
+    }
+
     public static void main(String[] args){
+        clearScreen();
+        gameMode = selectGameMode();
         clearScreen();
         numRows = getBoardHeight();
         numCols = getBoardWidth();
@@ -60,10 +93,12 @@ public class FiveInARow {
         clearScreen();
         game.printBoard();
 
-        game.play(5, "pvp");
-
-//        game.enableAi(1);
-//        game.enableAi(2);
-
+        if (gameMode.equals("1")){
+            game.play(5);
+        }else if(gameMode.equals("2")){
+            game.enableAi(1, 5);
+        }else if(gameMode.equals("3")){
+            game.enableAi(2, 5);
+        }
     }
 }
