@@ -96,11 +96,24 @@ public class Game implements GameInterface {
         return coords;
     }
 
+    public int getOtherPlayer (int player){
+        int otherPlayer;
+        if (player == 1) {
+            otherPlayer = 2;
+        } else {
+            otherPlayer = 1;
+        }
+        return otherPlayer;
+    }
+
     public int[] getAiMove(int player) {
         int[] coords;
-//        if () {
-// check if player can win, if so prevent it (maybe check for 3 too)
-        if (getStrategicMove(player, 4) != null) {
+        int otherPlayer = getOtherPlayer(player);
+        if (getStrategicMove(otherPlayer, 4) != null) {
+            coords = getStrategicMove(otherPlayer, 4);
+        } else if (getStrategicMove(otherPlayer, 3) != null) {
+            coords = getStrategicMove(otherPlayer, 3);
+        } else if (getStrategicMove(player, 4) != null) {
             coords = getStrategicMove(player, 4);
         } else if (getStrategicMove(player, 3) != null){
             coords = getStrategicMove(player, 3);
