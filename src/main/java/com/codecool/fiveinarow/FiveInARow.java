@@ -78,7 +78,7 @@ public class FiveInARow {
         return input;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args){
         clearScreen();
         gameMode = selectGameMode();
         clearScreen();

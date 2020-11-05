@@ -207,9 +207,20 @@ public class Game implements GameInterface {
         }
     }
 
+    public void sleep(int sec){
+        try
+        {
+            Thread.sleep(sec * 1000);
+        }
+        catch (InterruptedException e)
+        {
+            System.out.println("Something went wrong");
+        }
+
+    }
 
 
-    public void enableAi(int player, int howMany)throws InterruptedException  {
+    public void enableAi(int player, int howMany){
         if (player == 1){
             while (true){
                 int[] coords1 = getAiMove(1);
@@ -217,7 +228,7 @@ public class Game implements GameInterface {
                     mark(1, coords1[0], coords1[1]);
                     FiveInARow.clearScreen();
                     printBoard();
-                    Thread.sleep(2000);
+                    sleep(2);
                     if (gameOver(1, howMany)){
                         break;
                     }
@@ -228,7 +239,7 @@ public class Game implements GameInterface {
                 mark(2, coords2[0], coords2[1]);
                 FiveInARow.clearScreen();
                 printBoard();
-                Thread.sleep(2000);
+                sleep(2);
                 if (gameOver(2, howMany)){
                     break;
                 }
@@ -242,7 +253,7 @@ public class Game implements GameInterface {
                     mark(1, coords1[0], coords1[1]);
                     FiveInARow.clearScreen();
                     printBoard();
-                    Thread.sleep(2000);
+                    sleep(2);
                     if (gameOver(1, howMany)){
                         break;
                     }
@@ -252,7 +263,7 @@ public class Game implements GameInterface {
                         mark(2, coords2[0], coords2[1]);
                         FiveInARow.clearScreen();
                         printBoard();
-                        Thread.sleep(2000);
+                        sleep(2);
                         if (gameOver(2, howMany)){
                             break;
                         }

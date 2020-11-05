@@ -14,6 +14,6 @@ public interface GameInterface {
     boolean isFull();
     void printBoard();
     void printResult(int player);
-    void enableAi(int player, int howMany) throws InterruptedException;
+    void enableAi(int player, int howMany);
     void play(int howMany);
 }
