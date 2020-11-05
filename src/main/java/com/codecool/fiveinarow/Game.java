@@ -209,7 +209,7 @@ public class Game implements GameInterface {
 
 
 
-    public void enableAi(int player, int howMany) {
+    public void enableAi(int player, int howMany)throws InterruptedException  {
         if (player == 1){
             while (true){
                 int[] coords1 = getAiMove(1);
@@ -217,6 +217,7 @@ public class Game implements GameInterface {
                     mark(1, coords1[0], coords1[1]);
                     FiveInARow.clearScreen();
                     printBoard();
+                    Thread.sleep(2000);
                     if (gameOver(1, howMany)){
                         break;
                     }
@@ -226,8 +227,8 @@ public class Game implements GameInterface {
                 int[] coords2 = getMove(2);
                 mark(2, coords2[0], coords2[1]);
                 FiveInARow.clearScreen();
-
                 printBoard();
+                Thread.sleep(2000);
                 if (gameOver(2, howMany)){
                     break;
                 }
@@ -240,8 +241,8 @@ public class Game implements GameInterface {
                     int[] coords1 = getMove(1);
                     mark(1, coords1[0], coords1[1]);
                     FiveInARow.clearScreen();
-
                     printBoard();
+                    Thread.sleep(2000);
                     if (gameOver(1, howMany)){
                         break;
                     }
@@ -250,8 +251,8 @@ public class Game implements GameInterface {
                     if (coords2 != null){
                         mark(2, coords2[0], coords2[1]);
                         FiveInARow.clearScreen();
-
                         printBoard();
+                        Thread.sleep(2000);
                         if (gameOver(2, howMany)){
                             break;
                         }
