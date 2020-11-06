@@ -109,12 +109,12 @@ public class Game implements GameInterface {
     public int[] getAiMove(int player) {
         int[] coords;
         int otherPlayer = getOtherPlayer(player);
-        if (getStrategicMove(otherPlayer, 4) != null) {
+        if (getStrategicMove(player, 4) != null) {
+            coords = getStrategicMove(player, 4);
+        } else if (getStrategicMove(otherPlayer, 4) != null) {
             coords = getStrategicMove(otherPlayer, 4);
         } else if (getStrategicMove(otherPlayer, 3) != null) {
             coords = getStrategicMove(otherPlayer, 3);
-        } else if (getStrategicMove(player, 4) != null) {
-            coords = getStrategicMove(player, 4);
         } else if (getStrategicMove(player, 3) != null){
             coords = getStrategicMove(player, 3);
         } else if (getStrategicMove(player, 2) != null) {
@@ -140,46 +140,31 @@ public class Game implements GameInterface {
         }
     }
 
+
     public int[] getStrategicMove(int player, int howMany){
-        int[][] playedCoords;
         possibleMoves = new int[0][0];
 
-        if (isHorizontalWin(player, howMany)){
-            playedCoords = winningCoords;
-            int[] firstCoord = playedCoords[0];
-            int[] lastCoord = playedCoords[howMany-1];
-            int[] leftNeighbor = {firstCoord[0], (firstCoord[1]-1)};
-            int[] rightNeighbor = {lastCoord[0], (lastCoord[1]+1)};
-            savePossibleMoves(leftNeighbor);
-            savePossibleMoves(rightNeighbor);
+        int[][] horizontalMoves = searchForHorizontalPossibleMoves(player, howMany);
+        if (horizontalMoves != null) {
+            savePossibleMoves(horizontalMoves[0]);
+            savePossibleMoves(horizontalMoves[1]);
         }
-        if (isVerticalWin(player, howMany)){
-            playedCoords = winningCoords;
-            int[] firstCoord = playedCoords[0];
-            int[] lastCoord = playedCoords[howMany-1];
-            int[] topNeighbor = {firstCoord[0]-1, (firstCoord[1])};
-            int[] bottomNeighbor = {lastCoord[0]+1, (lastCoord[1])};
-            savePossibleMoves(topNeighbor);
-            savePossibleMoves(bottomNeighbor);
+        int[][] verticalMoves = searchForVerticalPossibleMoves(player, howMany);
+        if (verticalMoves != null) {
+            savePossibleMoves(verticalMoves[0]);
+            savePossibleMoves(verticalMoves[1]);
         }
-        if (leftDiagonalWin(player, howMany)){
-            playedCoords = winningCoords;
-            int[] firstCoord = playedCoords[0];
-            int[] lastCoord = playedCoords[howMany-1];
-            int[] topRightNeighbor = {firstCoord[0]-1, (firstCoord[1]+1)};
-            int[] bottomLeftNeighbor = {lastCoord[0]+1, (lastCoord[1]-1)};
-            savePossibleMoves(topRightNeighbor);
-            savePossibleMoves(bottomLeftNeighbor);
+        int[][] leftDiagonalMoves = searchForLeftDiagonalPossibleMoves(player, howMany);
+        if (leftDiagonalMoves != null) {
+            savePossibleMoves(leftDiagonalMoves[0]);
+            savePossibleMoves(leftDiagonalMoves[1]);
         }
-        if (rightDiagonalWin(player, howMany)) {
-            playedCoords = winningCoords;
-            int[] firstCoord = playedCoords[0];
-            int[] lastCoord = playedCoords[howMany-1];
-            int[] topLeftNeighbor = {firstCoord[0]-1, (firstCoord[1]-1)};
-            int[] bottomRightNeighbor = {lastCoord[0]+1, (lastCoord[1]+1)};
-            savePossibleMoves(topLeftNeighbor);
-            savePossibleMoves(bottomRightNeighbor);
+        int[][] rightDiagonalMoves = searchForRightDiagonalPossibleMoves(player, howMany);
+        if (rightDiagonalMoves != null) {
+            savePossibleMoves(rightDiagonalMoves[0]);
+            savePossibleMoves(rightDiagonalMoves[1]);
         }
+
         if (possibleMoves.length > 0) {
             int[] coords = getRandomCoord(possibleMoves);
             return coords;
@@ -188,14 +173,69 @@ public class Game implements GameInterface {
         }
     }
 
+    private int[][] searchForRightDiagonalPossibleMoves(int player, int setLength) {
+        int[][] playedCoords;
+        if (rightDiagonalWin(player, setLength)) {
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[setLength -1];
+            int[] topLeftNeighbor = {firstCoord[0]-1, (firstCoord[1]-1)};
+            int[] bottomRightNeighbor = {lastCoord[0]+1, (lastCoord[1]+1)};
+            int[][] moves = {topLeftNeighbor, bottomRightNeighbor};
+            return moves;
+        }
+        return null;
+    }
+
+    private int[][] searchForLeftDiagonalPossibleMoves(int player, int setLength) {
+        int[][] playedCoords;
+        if (leftDiagonalWin(player, setLength)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[setLength -1];
+            int[] topRightNeighbor = {firstCoord[0]-1, (firstCoord[1]+1)};
+            int[] bottomLeftNeighbor = {lastCoord[0]+1, (lastCoord[1]-1)};
+            int[][] moves = {topRightNeighbor, bottomLeftNeighbor};
+            return moves;
+        }
+        return null;
+    }
+
+    private int[][] searchForVerticalPossibleMoves(int player, int setLength) {
+        int[][] playedCoords;
+        if (isVerticalWin(player, setLength)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[setLength -1];
+            int[] topNeighbor = {firstCoord[0]-1, (firstCoord[1])};
+            int[] bottomNeighbor = {lastCoord[0]+1, (lastCoord[1])};
+            int[][] moves = {topNeighbor, bottomNeighbor};
+            return moves;
+        }
+        return null;
+    }
+
+    private int[][] searchForHorizontalPossibleMoves(int player, int setLength) {
+        int[][] playedCoords;
+        if (isHorizontalWin(player, setLength)){
+            playedCoords = winningCoords;
+            int[] firstCoord = playedCoords[0];
+            int[] lastCoord = playedCoords[setLength -1];
+            int[] leftNeighbor = {firstCoord[0], (firstCoord[1]-1)};
+            int[] rightNeighbor = {lastCoord[0], (lastCoord[1]+1)};
+            int[][] moves = {leftNeighbor, rightNeighbor};
+            return moves;
+        }
+        return null;
+    }
+
     public void savePossibleMoves(int[] move){
         if (isInBoard(move) && (isNotTaken(move))) {
             int[][] newArray = new int[possibleMoves.length+1][2];
             for (int i = 0; i < possibleMoves.length; i++) {
                 newArray[i] = possibleMoves[i];
             }
-            newArray[possibleMoves.length][0] = move[0];
-            newArray[possibleMoves.length][1] = move[1];
+            newArray[possibleMoves.length] = move;
             possibleMoves = newArray;
         }
     }
